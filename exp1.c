@@ -8,17 +8,7 @@ int main() {
     pid = fork();
 
     if (pid == 0) {
-        // execvp expects (char *file, char *const argv[])
-        // Your original call execvp("./", "parent", NULL) is invalid.
-
-        // Since you want to execute the same program, let's exec the current program again
-        // with some argument (or just the program itself):
-        char *args[] = {"./parent", NULL};  // Replace "./parent" with your actual executable name
-        execvp(args[0], args);
-
-        // If execvp fails:
-        perror("execvp failed");
-        _exit(1);
+        execl("./", "parent", NULL);
     } else if (pid > 0) {
         ret = waitpid(pid, &status, 0);
         printf("\n I am in parent \n");
