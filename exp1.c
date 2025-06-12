@@ -8,26 +8,27 @@ int main() {
     pid = fork();
 
     if (pid == 0) {
-        // In child process
-        char *args[] = {"./parent", NULL};  // Replace "./parent" with your actual executable
+        // execvp expects (char *file, char *const argv[])
+        // Your original call execvp("./", "parent", NULL) is invalid.
+
+        // Since you want to execute the same program, let's exec the current program again
+        // with some argument (or just the program itself):
+        char *args[] = {"./parent", NULL};  // Replace "./parent" with your actual executable name
         execvp(args[0], args);
+
         // If execvp fails:
         perror("execvp failed");
+        _exit(1);
     } else if (pid > 0) {
-        // In parent process
         ret = waitpid(pid, &status, 0);
-        printf("\nI am in parent\n");
-
+        printf("\n I am in parent \n");
         if (ret == -1) {
-            perror("waitpid error");
+            printf("\nError in wait ID \n");
         } else if (ret == pid) {
-            printf("I am waiting in parent\n");
+            printf("I am waiting in parent \n");
         } else {
-            printf("Unexpected waitpid result\n");
+            printf("Error in fork command \n");
         }
-    } else {
-        // Fork failed
-        perror("fork failed");
     }
 
     return 0;
