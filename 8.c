@@ -1,48 +1,54 @@
 #include <stdio.h>
-#include <conio.h>
 
-int main()
-{
-    int p[20], bt[20], wt[20], tat[20], i, k, n, temp;
-    float wtavg, tatavg;
+int main() {
+    int n, i, j;
+    int at[20], bt[20], ct[20], tat[20], wt[20], p[20];
+    int completed[20] = {0}, time = 0, min_bt, idx;
+    float avg_tat = 0, avg_wt = 0;
 
-    printf("\nEnter the number of processes -- ");
+    printf("Enter the number of processes: ");
     scanf("%d", &n);
 
-    for (i = 0; i < n; i++)
-    {
-        p[i] = i;
-        printf("Enter Burst Time for Process %d -- ", i);
-        scanf("%d", &bt[i]);
+    for(i = 0; i < n; i++) {
+        p[i] = i + 1;
+        printf("Enter Arrival Time and Burst Time for P%d: ", p[i]);
+        scanf("%d%d", &at[i], &bt[i]);
     }
 
-    for (i = 0; i < n; i++)
-        for (k = i + 1; k < n; k++)
-            if (bt[i] > bt[k])
-            {
-                temp = bt[i];
-                bt[i] = bt[k];
-                bt[k] = temp;
-                temp = p[i];
-                p[i] = p[k];
-                p[k] = temp;
+    int completed_count = 0;
+    while(completed_count < n) {
+        min_bt = 9999;
+        idx = -1;
+
+        for(i = 0; i < n; i++) {
+            if(at[i] <= time && !completed[i] && bt[i] < min_bt) {
+                min_bt = bt[i];
+                idx = i;
             }
+        }
 
-    wt[0] = wtavg = 0;
-    tat[0] = tatavg = bt[0];
+        if(idx != -1) {
+            time += bt[idx];
+            ct[idx] = time;
+            tat[idx] = ct[idx] - at[idx];
+            wt[idx] = tat[idx] - bt[idx];
+            completed[idx] = 1;
+            completed_count++;
 
-    for (i = 1; i < n; i++)
-    {
-        wt[i] = wt[i - 1] + bt[i - 1];
-        tat[i] = tat[i - 1] + bt[i];
-        wtavg = wtavg + wt[i];
-        tatavg = tatavg + tat[i];
+            avg_tat += tat[idx];
+            avg_wt += wt[idx];
+        } else {
+            time++; // No process is ready, move time forward
+        }
     }
 
-    printf("\n\t PROCESS \tBURST TIME \t WAITING TIME\t TURNAROUND TIME\n");
-    for (i = 0; i < n; i++)
-        printf("\n\t P%d \t\t %d \t\t %d \t\t %d", p[i], bt[i], wt[i], tat[i]);
+    printf("\nProcess\tAT\tBT\tCT\tTAT\tWT");
+    for(i = 0; i < n; i++) {
+        printf("\nP%d\t%d\t%d\t%d\t%d\t%d", p[i], at[i], bt[i], ct[i], tat[i], wt[i]);
+    }
 
-    printf("\nAverage Waiting Time -- %f", wtavg / n);
-    printf("\nAverage Turnaround Time -- %f", tatavg / n);
+    printf("\n\nAverage Turnaround Time: %.2f", avg_tat / n);
+    printf("\nAverage Waiting Time: %.2f\n", avg_wt / n);
+
+    return 0;
 }
