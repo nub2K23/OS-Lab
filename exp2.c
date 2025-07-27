@@ -1,16 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main() {
-    printf("\nKernel version: ");
+int main()
+{
+    printf("\n The kernel version:\n");
     system("cat /proc/sys/kernel/osrelease");
-
-    printf("\nCPU specifications: \n");
+    printf("\n The CPU space:\n");
     system("cat /proc/cpuinfo");
-
-    printf("\nSystem uptime: ");
-    system("cat /proc/uptime");
-    printf("\n");  // add newline for neat output
-
-    return 0;
+    printf("\n Amount of CPU time since system was last booted is:\n");
+    system("cat /proc/uptime\n");
 }
