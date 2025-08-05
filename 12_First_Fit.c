@@ -5,29 +5,23 @@ int main()
 {
     int frag[MAX], b[MAX], f[MAX], bf[MAX] = {0}, ff[MAX] = {0};
     int i, j, nb, nf, temp, highest;
-
     printf("\nMemory Management Scheme - Worst Fit\n");
-
     printf("Enter the number of blocks: ");
     scanf("%d", &nb);
-
     printf("Enter the number of files: ");
     scanf("%d", &nf);
-
     printf("\nEnter the size of the blocks:\n");
     for (i = 0; i < nb; i++)
     {
         printf("Block %d: ", i + 1);
         scanf("%d", &b[i]);
     }
-
     printf("\nEnter the size of the files:\n");
     for (i = 0; i < nf; i++)
     {
         printf("File %d: ", i + 1);
         scanf("%d", &f[i]);
     }
-
     for (i = 0; i < nf; i++)
     {
         highest = -1;
@@ -43,7 +37,6 @@ int main()
                 }
             }
         }
-
         if (highest != -1)
         {
             ff[i] = highest;
@@ -56,7 +49,6 @@ int main()
             frag[i] = -1;
         }
     }
-
     printf("\nFile_no\tFile_size\tBlock_no\tBlock_size\tFragment");
     for (i = 0; i < nf; i++)
     {
@@ -65,6 +57,5 @@ int main()
         else
             printf("\n%d\t%d\t\tNot Allocated", i + 1, f[i]);
     }
-
     return 0;
 }
