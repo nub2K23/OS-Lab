@@ -14,15 +14,17 @@ int main()
         scanf("%d", &bt[i]);
     }
 
-    wt[0] = wtavg = 0;
-    tat[0] = tatavg = bt[0];
+    wt[0] = 0;
+    tat[0] = bt[0];
+    wtavg = wt[0];
+    tatavg = tat[0];
 
     for (i = 1; i < n; i++)
     {
         wt[i] = wt[i - 1] + bt[i - 1];
         tat[i] = tat[i - 1] + bt[i];
-        wtavg = wtavg + wt[i];
-        tatavg = tatavg + tat[i];
+        wtavg += wt[i];
+        tatavg += tat[i];
     }
 
     printf("\t PROCESS \tBURST TIME \t WAITING TIME\t TURNAROUND TIME\n");
@@ -32,4 +34,6 @@ int main()
 
     printf("\nAverage Waiting Time -- %f", wtavg / n);
     printf("\nAverage Turnaround Time -- %f", tatavg / n);
+
+    return 0;
 }
