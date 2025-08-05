@@ -1,41 +1,56 @@
 #include <stdio.h>
+
 int main()
 {
     int i, j, time, sum_wait = 0, sum_turnaround = 0, smallest, n;
-    int at[10], bt[10], pt[10], rt[10], remain; // rt=remaining time
-    printf("\n Enter no of process:");
+    int at[20], bt[20], pt[20], rt[20], remain;
+
+    printf("Enter number of processes: ");
     scanf("%d", &n);
     remain = n;
+
     for (i = 0; i < n; i++)
     {
-        printf("Enter arrival time,Burst time and priority for process p%d:", i + 1);
-        scanf("%d", &at[i]);
-        scanf("%d", &bt[i]);
-        scanf("%d", &pt[i]);
+        printf("Enter Arrival Time, Burst Time and Priority for Process P%d: ", i + 1);
+        scanf("%d %d %d", &at[i], &bt[i], &pt[i]);
         rt[i] = bt[i];
     }
-    pt[9] = 11;
-    printf("\n\n Process\t|\tTurnaround Time\t|waiting Time\n ");
+
+    printf("\nProcess\t|\tTurnaround Time\t|\tWaiting Time\n");
+
     for (time = 0; remain != 0; time++)
     {
-        smallest = 9;
+        int highest_priority = 9999;
+        smallest = -1;
+
         for (i = 0; i < n; i++)
         {
-            if (at[i] <= time && pt[i] < pt[smallest] && rt[i] > 0)
+            if (at[i] <= time && rt[i] > 0 && pt[i] < highest_priority)
             {
+                highest_priority = pt[i];
                 smallest = i;
             }
         }
+
+        if (smallest == -1)
+            continue;
+
         rt[smallest]--;
+
         if (rt[smallest] == 0)
         {
             remain--;
-            printf("p[%d]\t|\t %d\t|\t%d\n", smallest + 1, time + 1 - at[smallest], time + 1 - at[smallest] - bt[smallest]);
-            sum_turnaround += time + 1 - at[smallest];
-            sum_wait += time + 1 - at[smallest] - bt[smallest];
+            int turnaround = time + 1 - at[smallest];
+            int waiting = turnaround - bt[smallest];
+            sum_turnaround += turnaround;
+            sum_wait += waiting;
+
+            printf("P%d\t|\t%d\t\t|\t%d\n", smallest + 1, turnaround, waiting);
         }
     }
-    printf("\n avg waitig time=%f\n", sum_wait * 1.0 / n);
-    printf("Avg turnaroud time=%f", sum_turnaround * 1.0 / n);
+
+    printf("\nAverage Waiting Time = %.2f\n", sum_wait * 1.0 / n);
+    printf("Average Turnaround Time = %.2f\n", sum_turnaround * 1.0 / n);
+
     return 0;
 }
